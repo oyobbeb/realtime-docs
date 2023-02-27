@@ -9,3 +9,21 @@ exports.renderDocs = (req, res, next) => {
     next(err);
   }
 }
+
+exports.saveNewDocs = async (req, res, next) => {
+  const { title, description, contents, displayName, email } = req.body;
+
+  const document = await Doc.create({
+    title,
+    description,
+    contents,
+    createdBy: displayName,
+    createdById: email,
+  });
+
+  try {
+    res.status(200).send({ result: "ok", document });
+  } catch(err) {
+    next(err);
+  }
+}

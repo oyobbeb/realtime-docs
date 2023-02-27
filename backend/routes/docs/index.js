@@ -5,4 +5,6 @@ const verifyToken = require("../middlewares/verifyToken");
 
 router.get("/", verifyToken, docsController.renderDocs);
 
+router.post("/new", verifyToken, docsController.saveNewDocs);
+
 module.exports = router;

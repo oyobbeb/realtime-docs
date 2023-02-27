@@ -11,10 +11,7 @@ const DocSchema = new mongoose.Schema({
    },
   contents: {
     type: String,
-    lowercase: true,
     required: true,
-    trim: true,
-    unique: true,
   },
   description: {
     type: String,
@@ -22,6 +19,10 @@ const DocSchema = new mongoose.Schema({
     trim: true,
   },
   createdBy: {
+    type: String,
+    required: true,
+  },
+  createdById: {
     type: String,
     required: true,
   },
