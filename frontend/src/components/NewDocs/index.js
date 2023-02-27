@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
 import TextEditor from "../TextEditor";
 import styles from "./newDocs.module.css";
 
 export default function NewDocs() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     title: "",
     description: "",
@@ -14,20 +16,27 @@ export default function NewDocs() {
   const email = auth?.currentUser?.email;
 
   async function handleSubmit() {
-    const token = localStorage.getItem("jwt");
+    try {
+      const token = localStorage.getItem("jwt");
 
-    const response = await fetch("http://localhost:8000/docs/new", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ title, contents, description, displayName, email }),
-    });
+      const response = await fetch("http://localhost:8000/docs/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, contents, description, displayName, email }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    console.log(data);
+      if (data.result === "ok") {
+        navigate("/");
+      }
+    } catch(err) {
+      alert(err);
+      console.error(err);
+    }
   }
 
   function handleInput(e) {

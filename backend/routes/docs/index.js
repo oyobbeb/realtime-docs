@@ -8,5 +8,6 @@ router.get("/", verifyToken, docsController.renderDocs);
 router.post("/new", verifyToken, docsController.saveNewDocs);
 
 router.get("/:id", docsController.renderEachDoc);
+router.post("/:id", docsController.updateContents);
 
 module.exports = router;

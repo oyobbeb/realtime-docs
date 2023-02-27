@@ -39,3 +39,18 @@ exports.renderEachDoc = async (req, res, next) => {
     next(err);
   }
 }
+
+exports.updateContents = async (req, res, next) => {
+  const { id } = req.params;
+  const { title, description, updateContents} = req.body;
+
+  const document = await Doc.findByIdAndUpdate({ _id: id }, { title, description, contents: updateContents } );
+
+  console.log(document, "document");
+
+  try {
+    res.status(302).send({ result: "ok", document });
+  } catch(err) {
+    next(err);
+  }
+}

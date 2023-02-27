@@ -31,15 +31,15 @@ export default function EditDocs() {
     handleData();
   }, [id]);
 
-  async function handleSubmit() {
-    const token = localStorage.getItem("jwt");
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-    const response = await fetch("http://localhost:8000/docs/new", {
+    const response = await fetch(`http://localhost:8000/docs/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
+      mode: "cors",
       body: JSON.stringify({ title, updateContents, description }),
     });
 
@@ -54,8 +54,6 @@ export default function EditDocs() {
       [e.target.name]: e.target.value,
     });
   }
-
-  console.log(data, "data");
 
   return (
     <form onSubmit={handleSubmit}>
