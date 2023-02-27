@@ -6,10 +6,15 @@ const io = require("socket.io")(3001, {
 });
 
 io.on("connection", (socket) => {
-  console.log("user connected");
+  const { id } = socket.handshake.query;
+  socket.join(id);
 
-  socket.on("edit-content", content => {
-    socket.broadcast.emit("receive-content", content);
+  socket.on("edit-content", (content, id) => {
+    if (!id) {
+      socket.broadcast.emit("receive-content", content);
+    }
+
+    socket.to(id).emit("receive-content", content);
   });
 });
 

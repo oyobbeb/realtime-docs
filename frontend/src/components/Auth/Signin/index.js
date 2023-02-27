@@ -13,7 +13,6 @@ export default function Signin() {
     signInWithRedirect(auth, provider);
 
     if (auth) {
-      console.log(auth);
       navigate("/");
     }
   }

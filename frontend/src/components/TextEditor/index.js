@@ -1,33 +1,51 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
+import DOMPurify from "dompurify";
+import { useParams } from "react-router-dom";
 
-export default function TextEditor({ onContentChange, contentsValue }) {
+export default function TextEditor({ contentsValue, setContentsValue, setUpdateContents }) {
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
+  const { id } = useParams();
 
   useEffect(() => {
-    const s = io("http://localhost:3001");
+    const s = io("http://localhost:3001", {
+      query: { id }
+    });
     setSocket(s);
 
     return () => {
       s.disconnect();
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     socket?.on("receive-content", content => {
-      setContent(content);
+      if (setContentsValue) {
+        setContentsValue(content);
+      }
     });
-  }, [onContentChange, socket]);
+  }, [setContentsValue, socket]);
 
-  const handleInput = useCallback((e) => {
+  function handleInput(e) {
     const newContent = e.target.innerHTML;
+    const sanitizedValue = DOMPurify.sanitize(newContent);
     setContent((prev) => prev);
-    onContentChange(newContent);
 
-    socket.emit("edit-content", newContent);
-  }, [onContentChange, socket]);
+    if (setUpdateContents) {
+      setUpdateContents(sanitizedValue);
+    }
+
+    socket.emit("edit-content", sanitizedValue, id);
+  }
+
+  function handleKeyDown(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      document.execCommand("insertLineBreak");
+    }
+  }
 
   return (
     <div>
@@ -35,7 +53,8 @@ export default function TextEditor({ onContentChange, contentsValue }) {
       <div
         contentEditable={true}
         onInput={handleInput}
-        dangerouslySetInnerHTML={{__html: contentsValue ? contentsValue : content}}
+        onKeyDown={handleKeyDown}
+        dangerouslySetInnerHTML={{__html: id ? contentsValue : content}}
         className={styles.editor}
       ></div>
     </div>

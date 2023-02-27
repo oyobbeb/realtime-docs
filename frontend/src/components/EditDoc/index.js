@@ -11,7 +11,8 @@ export default function EditDocs() {
     contents: "",
   });
   const [updateContents, setUpdateContents] = useState("");
-  const { title, description, contents } = data;
+  const [contents, setContents] = useState("");
+  const { title, description } = data;
 
   useEffect(() => {
     async function handleData() {
@@ -24,8 +25,9 @@ export default function EditDocs() {
       data.document && setData({
         title: data.document.title,
         description: data.document.description,
-        contents: data.document.contents,
       });
+
+      setContents(data.document.contents);
     }
 
     handleData();
@@ -33,19 +35,21 @@ export default function EditDocs() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:8000/docs/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify({ title, updateContents, description }),
+      });
 
-    const response = await fetch(`http://localhost:8000/docs/${id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      body: JSON.stringify({ title, updateContents, description }),
-    });
-
-    const data = await response.json();
-
-    console.log(data);
+      const data = await response.json();
+      console.log(data);
+    } catch(err) {
+      console.error(err);
+    }
   }
 
   function handleInput(e) {
@@ -75,7 +79,12 @@ export default function EditDocs() {
           />
         </div>
         <div className={styles["text-editor"]}>
-          <TextEditor onContentChange={setUpdateContents} contentsValue={contents} className={styles["text-box"]} />
+          <TextEditor
+            setUpdateContents={setUpdateContents}
+            setContentsValue={setContents}
+            contentsValue={contents}
+            className={styles["text-box"]}
+          />
         </div>
         <div>
           <button className={styles.submit} type="submit">Save Document</button>

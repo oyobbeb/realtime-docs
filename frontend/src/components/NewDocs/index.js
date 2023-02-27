@@ -68,7 +68,7 @@ export default function NewDocs() {
           />
         </div>
         <div className={styles["text-editor"]}>
-          <TextEditor onContentChange={setContents} className={styles["text-box"]} />
+          <TextEditor setUpdateContents={setContents} className={styles["text-box"]} />
         </div>
         <div>
           <button className={styles.submit} type="submit">Make New Document</button>

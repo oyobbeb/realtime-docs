@@ -55,12 +55,10 @@ export default function Main() {
     getDocs();
   }, []);
 
-  console.log(docs);
-
   return (
     <div>
       <div className={styles.grid}>
-        {docs.length > 2 && docs.map((doc, index) => 
+        {docs.length > 2 && docs.map((doc) =>
           <div key={doc._id} className={styles.doc}>
             <h3>{doc.title}</h3>
             <h3>{doc.description}</h3>
