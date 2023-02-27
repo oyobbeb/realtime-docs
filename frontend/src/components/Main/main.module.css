@@ -1,0 +1,85 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20%, 250px));
+  grid-auto-rows: 350px;
+  grid-gap: 1em;
+  column-gap: 30px;
+  row-gap: 30px;
+  margin: 40px 0;
+  padding: 0 20px;
+}
+
+.doc {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding: 20px 40px;
+  border: 0.1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px #fff, 10px 10px 20px #d9d9d9;
+}
+
+.option-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-container .option-text:nth-child(n+4) {
+  display: none;
+}
+
+.option-text {
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  width: 200px;
+  color: gray;
+}
+
+.right-section {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.right-bottom {
+  display: flex;
+  position: absolute;
+  align-items: end;
+  flex-direction: column;
+  bottom: 20px;
+  gap: 10px;
+}
+
+.name-container {
+  display: flex;
+  justify-content: center;
+  width: 80px;
+  padding: 10px;
+  border-radius: 20px;
+  color: white;
+}
+
+.expires-container {
+  display: flex;
+  justify-content: center;
+  width: 250px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 40px;
+  font-size: 18px;
+  color: gray;
+}
+
+.vote-button {
+  width: 100px;
+  display: flex;
+  padding: 8px;
+  justify-content: center;
+  background-color: #399EFB;
+  color: white;
+  border-radius: 20px;
+  font-size: 20px;
+}

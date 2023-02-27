@@ -27,3 +27,15 @@ exports.saveNewDocs = async (req, res, next) => {
     next(err);
   }
 }
+
+exports.renderEachDoc = async (req, res, next) => {
+  const { id } = req.params;
+
+  const document = await Doc.findById({ _id: id });
+
+  try {
+    res.status(200).send({ result: "ok", document });
+  } catch(err) {
+    next(err);
+  }
+}

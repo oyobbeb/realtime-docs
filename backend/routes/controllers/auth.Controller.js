@@ -1,9 +1,12 @@
 const User = require("../../models/User");
+const Doc = require("../../models/Doc");
 const jwt = require("jsonwebtoken");
 
-exports.renderMain = (req, res, next) => {
+exports.renderMain = async (req, res, next) => {
+  const docs = await Doc.find();
+
   try {
-    res.status(200).send({ result: "ok" });
+    res.status(200).send({ result: "good", docs });
   } catch(err) {
     next(err);
   }

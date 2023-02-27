@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
 
-export default function TextEditor({ onContentChange }) {
+export default function TextEditor({ onContentChange, contentsValue }) {
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
 
@@ -17,7 +17,6 @@ export default function TextEditor({ onContentChange }) {
 
   useEffect(() => {
     socket?.on("receive-content", content => {
-      onContentChange(content);
       setContent(content);
     });
   }, [onContentChange, socket]);
@@ -25,9 +24,10 @@ export default function TextEditor({ onContentChange }) {
   const handleInput = useCallback((e) => {
     const newContent = e.target.innerHTML;
     setContent((prev) => prev);
+    onContentChange(newContent);
 
     socket.emit("edit-content", newContent);
-  }, [socket]);
+  }, [onContentChange, socket]);
 
   return (
     <div>
@@ -35,7 +35,7 @@ export default function TextEditor({ onContentChange }) {
       <div
         contentEditable={true}
         onInput={handleInput}
-        dangerouslySetInnerHTML={{__html: content}}
+        dangerouslySetInnerHTML={{__html: contentsValue ? contentsValue : content}}
         className={styles.editor}
       ></div>
     </div>

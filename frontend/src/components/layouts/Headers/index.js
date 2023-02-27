@@ -17,10 +17,10 @@ export default function Headers() {
       <div className={styles["left-header"]}>
         <Link className={styles.a} to={"/"}>Docs</Link>
       </div>
-      <div>{auth?.currentUser?.email}</div>
       <div className={styles["right-header"]}>
         <div className={styles["header-component"]}>
-          <Link className={styles.a} to={"/"}>New Docs</Link>
+          <div>{auth?.currentUser?.email}</div>
+          <Link className={styles.a} to={"/new"}>New Docs</Link>
           <Link className={styles.a} to={"/"}>My Docs</Link>
           <button className={styles["logout-button"]} onClick={logout}>Logout</button>
         </div>

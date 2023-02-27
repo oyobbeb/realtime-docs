@@ -8,6 +8,12 @@ a:hover {
   color: #F95700;
 }
 
+@media screen and (max-width: 800px) {
+  a {
+    font-size: 16px;
+  }
+}
+
 header {
   display: flex;
   top: auto;
@@ -47,4 +53,10 @@ header {
 .logout-button:hover {
   color: #F95700;
   cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  .logout-button {
+    font-size: 16px;
+  }
 }

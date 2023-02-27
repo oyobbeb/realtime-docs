@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-form {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  width: 50vw;
+  height: calc(30vh - 70px);
+  margin: 20px 0;
+}
+
+.input {
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid gray;
+  font-size: 20px;
+}
+
+.submit {
+  padding: 20px;
+  margin: 20px;
+  border: hidden;
+  background-color: #F95700;
+  color: white;
+  font-size: 20px;
+  border-radius: 10px;
+}

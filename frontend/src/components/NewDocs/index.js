@@ -1,39 +1,34 @@
-import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import TextEditor from "../../TextEditor";
+import React, { useState } from "react";
+import { auth } from "../../features/api/firebaseApi";
+import TextEditor from "../TextEditor";
 import styles from "./newDocs.module.css";
 
 export default function NewDocs() {
-  const navigate = useNavigate();
   const [data, setData] = useState({
     title: "",
-    content: "",
     description: "",
   });
-  const { title, content, description } = data;
+  const [contents, setContents] = useState("");
+  const { title, description } = data;
+  const displayName = auth?.currentUser?.displayName;
+  const email = auth?.currentUser?.email;
 
-  const handleSubmit = useCallback(() => {
-    async function verifyToken() {
-      const token = localStorage.getItem("jwt");
+  async function handleSubmit() {
+    const token = localStorage.getItem("jwt");
 
-      const response = await fetch("http://localhost:8000/docs/new", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ title, content }),
-      });
+    const response = await fetch("http://localhost:8000/docs/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title, contents, description, displayName, email }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!data.user) {
-        alert("No authorization");
-        navigate("/auth/signin");
-      }
-    }
-
-    verifyToken();
-  }, [content, navigate, title]);
+    console.log(data);
+  }
 
   function handleInput(e) {
     setData({
@@ -41,13 +36,6 @@ export default function NewDocs() {
       [e.target.name]: e.target.value,
     });
   }
-
-  const handleContentChange = useCallback((newContent) => {
-    setData({
-      ...data,
-      content: newContent,
-    });
-  }, [data]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -71,7 +59,7 @@ export default function NewDocs() {
           />
         </div>
         <div className={styles["text-editor"]}>
-          <TextEditor onContentChange={handleContentChange} className={styles["text-box"]} />
+          <TextEditor onContentChange={setContents} className={styles["text-box"]} />
         </div>
         <div>
           <button className={styles.submit} type="submit">Make New Document</button>

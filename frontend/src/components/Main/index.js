@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
+import styles from "./main.module.css";
 
 export default function Main() {
+  const [docs, setDocs] = useState([]);
   const { email, accessToken, displayName } = auth?.currentUser;
 
   useEffect(() => {
@@ -32,22 +34,45 @@ export default function Main() {
     setToken();
   }, [accessToken, displayName, email]);
 
+  useEffect(() => {
+    async function getDocs() {
+      try {
+        const response = await fetch("http://localhost:8000/", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          mode: "cors",
+        });
+
+        const data = await response.json();
+
+        data && setDocs(data.docs);
+      } catch(err) {
+        alert(err.message);
+      }
+    }
+
+    getDocs();
+  }, []);
+
+  console.log(docs);
+
   return (
     <div>
-      <Link to={"/new"}>Make New Docs</Link>
-      <div className="docs-grid">
-        {[1.2].forEach((doc, index) => {
-          <div className="vote">
+      <div className={styles.grid}>
+        {docs.length > 2 && docs.map((doc, index) => 
+          <div key={doc._id} className={styles.doc}>
             <h3>{doc.title}</h3>
             <h3>{doc.description}</h3>
-            <div className="right-section">
-              <div className="right-bottom">
-                <div className="name-container">{doc.createdBy}</div>
-                <Link to={`/doc/${doc._id}`} className="edit-button">Edit</Link>
+            <div>문서: {doc.contents}</div>
+            <div className={styles["right-section"]}>
+              <div className={styles["right-bottom"]}>
+                <div className={styles["name-container"]}>{doc.createdBy}</div>
+                <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>Edit</Link>
               </div>
             </div>
           </div>
-        })}
+        )}
       </div>
     </div>
   );

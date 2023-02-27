@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TextEditor from "../TextEditor";
 
@@ -16,7 +16,6 @@ export default function Docs() {
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (!data.user) {
         alert("No authorization");
