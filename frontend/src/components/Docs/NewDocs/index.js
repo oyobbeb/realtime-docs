@@ -50,27 +50,33 @@ export default function NewDocs() {
   }, [data]);
 
   return (
-    <form className={styles["form-container"]} onSubmit={handleSubmit}>
-      <div className={styles["left-form"]}>
-        <input
-          className={styles.input}
-          value={title}
-          placeholder="title"
-          name="title"
-          onChange={handleInput}
-        ></input>
-        <input
-          className={styles.input}
-          value={description}
-          placeholder="description"
-          onChange={handleInput}
-          name="description"
-        />
+    <form onSubmit={handleSubmit}>
+      <div className={styles.container}>
+        <div className={styles["text-form"]}>
+          <input
+            className={styles.input}
+            value={title}
+            placeholder="title"
+            name="title"
+            onChange={handleInput}
+            required
+          ></input>
+          <input
+            className={styles.input}
+            value={description}
+            placeholder="description"
+            onChange={handleInput}
+            name="description"
+            required
+          />
+        </div>
+        <div className={styles["text-editor"]}>
+          <TextEditor onContentChange={handleContentChange} className={styles["text-box"]} />
+        </div>
+        <div>
+          <button className={styles.submit} type="submit">Make New Document</button>
+        </div>
       </div>
-      <div className={styles["text-editor"]}>
-        <TextEditor onContentChange={handleContentChange} className={styles["text-box"]} />
-      </div>
-      <button type="submit">Make</button>
     </form>
   );
 }

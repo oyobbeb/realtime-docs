@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
 
-export default function TextEditor() {
+export default function TextEditor({ onContentChange }) {
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
 
@@ -17,14 +17,15 @@ export default function TextEditor() {
 
   useEffect(() => {
     socket?.on("receive-content", content => {
-      console.log(content);
+      onContentChange(content);
       setContent(content);
     });
-  }, [socket]);
+  }, [onContentChange, socket]);
 
   const handleInput = useCallback((e) => {
     const newContent = e.target.innerHTML;
     setContent((prev) => prev);
+
     socket.emit("edit-content", newContent);
   }, [socket]);
 
