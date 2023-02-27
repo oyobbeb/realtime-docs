@@ -1,0 +1,50 @@
+a {
+  font-size: 24px;
+  text-decoration: none;
+  color: #525252;
+}
+
+a:hover {
+  color: #F95700;
+}
+
+header {
+  display: flex;
+  top: auto;
+  height: 50px;
+}
+
+.left-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.right-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 6;
+  height: 100%;
+  margin: 0 20px 0 0;
+}
+
+.header-component {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 40%;
+}
+
+.logout-button {
+  border: hidden;
+  font-size: 24px;
+  background-color: white;
+  color: #525252;
+}
+
+.logout-button:hover {
+  color: #F95700;
+  cursor: pointer;
+}

@@ -1,0 +1,14 @@
+.text-header {
+  display: flex;
+  justify-content: center;
+  /* background-color: gray; */
+}
+
+.editor {
+  display: flex;
+  border: 1px solid gray;
+  padding: 10px;
+  border-radius: 5px;
+  width: 50vw;
+  height: calc(50vh - 40px);
+}
