@@ -15,8 +15,14 @@ export default function EditDocs() {
   const { title, description } = data;
 
   useEffect(() => {
+    const token = localStorage.getItem("jwt");
+
     async function handleData() {
       const response = await fetch(`http://localhost:8000/docs/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         mode: "cors",
       });
 
@@ -27,7 +33,7 @@ export default function EditDocs() {
         description: data.document.description,
       });
 
-      setContents(data.document.contents);
+      setContents(data?.document?.contents);
     }
 
     handleData();
@@ -36,10 +42,13 @@ export default function EditDocs() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("jwt");
+
       const response = await fetch(`http://localhost:8000/docs/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         mode: "cors",
         body: JSON.stringify({ title, updateContents, description }),

@@ -5,7 +5,9 @@ import styles from "./main.module.css";
 
 export default function Main() {
   const [docs, setDocs] = useState([]);
-  const { email, accessToken, displayName } = auth?.currentUser;
+  const email = auth?.currentUser?.email;
+  const accessToken = auth?.currentUser?.accessToken;
+  const displayName = auth?.currentUser?.displayName;
 
   useEffect(() => {
     async function setToken() {
@@ -62,11 +64,11 @@ export default function Main() {
           <div key={doc._id} className={styles.doc}>
             <h3>{doc.title}</h3>
             <h3>{doc.description}</h3>
-            <div>문서: {doc.contents}</div>
+            <div className={styles.contents}>{doc.contents}</div>
             <div className={styles["right-section"]}>
               <div className={styles["right-bottom"]}>
                 <div className={styles["name-container"]}>{doc.createdBy}</div>
-                <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>Edit</Link>
+                <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>편집</Link>
               </div>
             </div>
           </div>

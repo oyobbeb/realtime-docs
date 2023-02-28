@@ -1,7 +1,7 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20%, 250px));
-  grid-auto-rows: 350px;
+  grid-template-columns: repeat(auto-fit, minmax(30%, 30vw));
+  grid-auto-rows: calc(50vh - 100px);
   grid-gap: 1em;
   column-gap: 30px;
   row-gap: 30px;
@@ -19,24 +19,15 @@
   box-shadow: 0px 0px 20px #fff, 10px 10px 20px #d9d9d9;
 }
 
-.option-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+h3 {
+  color: darkslategray;
 }
 
-.option-container .option-text:nth-child(n+4) {
-  display: none;
-}
-
-.option-text {
-  display: flex;
-  justify-content: center;
-  border-radius: 20px;
-  padding: 10px;
-  border: 1px solid lightgray;
-  width: 200px;
+.contents {
+  padding: 20px;
+  height: 50vh;
   color: gray;
+  box-shadow: 10px 10px 20px #fff, 10px 10px 20px #d9d9d9;
 }
 
 .right-section {
@@ -62,24 +53,16 @@
   color: white;
 }
 
-.expires-container {
-  display: flex;
-  justify-content: center;
-  width: 250px;
-  padding: 10px;
-  border: 1px solid lightgray;
+.edit-button {
+  text-align: center;
+  margin: 10px;
+  padding: 20px;
+  font-size: 20px;
+  width: 50%;
   border-radius: 40px;
-  font-size: 18px;
-  color: gray;
 }
 
-.vote-button {
-  width: 100px;
-  display: flex;
-  padding: 8px;
-  justify-content: center;
-  background-color: #399EFB;
-  color: white;
-  border-radius: 20px;
-  font-size: 20px;
+.edit-button:hover {
+  background-color: #eeeeee;
+  color: gray;
 }
