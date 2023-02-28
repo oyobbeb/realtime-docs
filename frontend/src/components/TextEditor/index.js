@@ -30,6 +30,8 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
 
   function handleInput(e) {
     const newContent = e.target.innerHTML;
+    const selectionStart = e.target.selectionStart;
+    const selectionEnd = e.target.selectionEnd;
     const sanitizedValue = DOMPurify.sanitize(newContent);
     setContent((prev) => prev);
 
@@ -37,7 +39,7 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
       setUpdateContents(sanitizedValue);
     }
 
-    socket.emit("edit-content", sanitizedValue, id);
+    socket.emit("edit-content", sanitizedValue, id, selectionStart, selectionEnd);
   }
 
   function handleKeyDown(e) {

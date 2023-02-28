@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import TextEditor from "../TextEditor";
 import styles from "./editDocs.module.css";
@@ -39,8 +39,9 @@ export default function EditDocs() {
     handleData();
   }, [id]);
 
-  async function handleSubmit(e) {
+  const handleSubmit = useCallback(async(e) => {
     e.preventDefault();
+
     try {
       const token = localStorage.getItem("jwt");
 
@@ -56,10 +57,19 @@ export default function EditDocs() {
 
       const data = await response.json();
       console.log(data);
+
     } catch(err) {
       console.error(err);
     }
-  }
+  }, [description, id, title, updateContents]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleSubmit({ preventDefault: () => {} });
+    }, 20000);
+
+    return () => clearInterval(interval);
+  }, [handleSubmit]);
 
   function handleInput(e) {
     setData({

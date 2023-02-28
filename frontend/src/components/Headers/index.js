@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./headers.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../../features/api/firebaseApi";
+import { auth } from "../../features/api/firebaseApi";
 
 export default function Headers() {
   const navigate = useNavigate();
@@ -12,6 +12,8 @@ export default function Headers() {
     navigate("/auth/signin");
   }
 
+  console.log(auth.currentUser);
+
   return (
     <header className={styles.header}>
       <div className={styles["left-header"]}>
@@ -20,6 +22,8 @@ export default function Headers() {
       <div className={styles["right-header"]}>
         <div className={styles["header-component"]}>
           <div>{auth?.currentUser?.email}</div>
+          <div>{auth?.currentUser?.displayName}</div>
+          <img className={styles.profile} src={auth?.currentUser?.photoURL} alt="Profile" />
           <Link className={styles.a} to={"/new"}>New Docs</Link>
           <Link className={styles.a} to={"/"}>My Docs</Link>
           <button className={styles["logout-button"]} onClick={logout}>Logout</button>
