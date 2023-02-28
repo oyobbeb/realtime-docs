@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
 import DOMPurify from "dompurify";
@@ -7,6 +7,11 @@ import { useParams } from "react-router-dom";
 export default function TextEditor({ contentsValue, setContentsValue, setUpdateContents }) {
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
+  const [position, setPosition] = useState({
+    top: 0,
+    left: 0,
+    end: 0,
+  })
   const { id } = useParams();
 
   useEffect(() => {
@@ -21,25 +26,37 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
   }, [id]);
 
   useEffect(() => {
-    socket?.on("receive-content", content => {
+    socket?.on("receive-content", (content, top, left, end) => {
       if (setContentsValue) {
         setContentsValue(content);
       }
+
+      setPosition({top, left, end});
     });
   }, [setContentsValue, socket]);
 
   function handleInput(e) {
     const newContent = e.target.innerHTML;
-    const selectionStart = e.target.selectionStart;
-    const selectionEnd = e.target.selectionEnd;
     const sanitizedValue = DOMPurify.sanitize(newContent);
     setContent((prev) => prev);
+
+    const editor = e.target;
+    const spansToRemove = editor.querySelectorAll("span");
+    spansToRemove.forEach(span => span.remove());
 
     if (setUpdateContents) {
       setUpdateContents(sanitizedValue);
     }
 
-    socket.emit("edit-content", sanitizedValue, id, selectionStart, selectionEnd);
+    const selection = window.getSelection();
+    const range = selection?.getRangeAt(0);
+
+    if (selection.getRangeAt === 0) return;
+    const rect = range?.getBoundingClientRect();
+    const top = rect?.top;
+    const left = rect?.left;
+
+    socket.emit("edit-content", sanitizedValue, id, top, left);
   }
 
   function handleKeyDown(e) {
@@ -56,7 +73,11 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
         contentEditable={true}
         onInput={handleInput}
         onKeyDown={handleKeyDown}
-        dangerouslySetInnerHTML={{__html: id ? contentsValue : content}}
+        dangerouslySetInnerHTML={{
+          __html: position.top > 0 ?
+          `<span class="${styles.cursor}" style="left: ${position.left}px; top: ${position.top}px;"></span>${(id && contentsValue) || content}` :
+          `${(id && contentsValue) || content}`
+        }}
         className={styles.editor}
       ></div>
     </div>

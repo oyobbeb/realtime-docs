@@ -9,12 +9,12 @@ io.on("connection", (socket) => {
   const { id } = socket.handshake.query;
   socket.join(id);
 
-  socket.on("edit-content", (content, id) => {
+  socket.on("edit-content", (content, id, top, left) => {
     if (!id) {
       socket.broadcast.emit("receive-content", content);
     }
 
-    socket.to(id).emit("receive-content", content);
+    socket.to(id).emit("receive-content", content, top, left);
   });
 });
 
