@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
 import DOMPurify from "dompurify";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function TextEditor({ contentsValue, setContentsValue, setUpdateContents }) {
+  const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
   const [position, setPosition] = useState({
     top: 0,
     left: 0,
-    end: 0,
   })
   const { id } = useParams();
 
@@ -26,14 +26,19 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
   }, [id]);
 
   useEffect(() => {
-    socket?.on("receive-content", (content, top, left, end) => {
+    socket?.on("receive-content", (content, top, left) => {
       if (setContentsValue) {
         setContentsValue(content);
       }
 
-      setPosition({top, left, end});
+      setPosition({top, left});
     });
-  }, [setContentsValue, socket]);
+
+    socket?.on("room-full", () => {
+      alert("Sorry, the room is full");
+      navigate("/");
+    });
+  }, [navigate, setContentsValue, socket]);
 
   function handleInput(e) {
     const newContent = e.target.innerHTML;
