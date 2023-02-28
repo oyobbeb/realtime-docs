@@ -21,8 +21,6 @@ export default function Docs() {
 
         const data = await response.json();
 
-        console.log(data, "data");
-
         data && setDocs(data.mydocs);
       } catch(err) {
         alert(err.message);

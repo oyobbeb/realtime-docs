@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Signin from "../Signin";
 import Main from "../Main";
 import Docs from "../Docs";
@@ -21,9 +21,12 @@ function App() {
       <Headers />
       <Routes>
         <Route path="/" element={user ? <Main /> : <Loading />} />
-        <Route path="new" element={<NewDocs />} />
-        <Route path="mydocs" element={<Docs />} />
-        <Route path="/docs/:id" element={<EditDocs />} />
+        <Route path="/docs" element={<Navigate to="/" replace />} />
+        <Route path="/docs">
+          <Route path="new" element={<NewDocs />} />
+          <Route path="mydocs" element={<Docs />} />
+          <Route path=":id" element={<EditDocs />} />
+        </Route>
         <Route path="/auth/signin" element={<Signin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -22,8 +22,8 @@ export default function Headers() {
           <div>{auth?.currentUser?.email}</div>
           <div>{auth?.currentUser?.displayName}</div>
           <img className={styles.profile} src={auth?.currentUser?.photoURL} alt="Profile" />
-          <Link className={styles.a} to={"/new"}>New Docs</Link>
-          <Link className={styles.a} to={"/mydocs"}>My Docs</Link>
+          <Link className={styles.a} to={"docs/new"}>New Docs</Link>
+          <Link className={styles.a} to={"docs/mydocs"}>My Docs</Link>
           <button className={styles["logout-button"]} onClick={logout}>Logout</button>
         </div>
       </div>
