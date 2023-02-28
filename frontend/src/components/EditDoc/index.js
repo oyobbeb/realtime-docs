@@ -13,9 +13,8 @@ export default function EditDocs() {
   });
   const [updateContents, setUpdateContents] = useState("");
   const [contents, setContents] = useState("");
+  const [photo, setPhoto] = useState("");
   const { title, description } = data;
-
-  let other;
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -64,10 +63,9 @@ export default function EditDocs() {
         body: JSON.stringify({ title, updateContents, description }),
       });
 
-
       const data = await response.json();
-      console.log(data);
 
+      console.log(data);
     } catch(err) {
       console.error(err);
     }
@@ -109,9 +107,9 @@ export default function EditDocs() {
             />
           </div>
           <div className={styles.userlist}>
-            <div className={styles.editors}>Now Editing</div>
-            <img className={styles.profile} src={auth.currentUser.photoURL} alt="Profile" />
-            {other ? <img className={styles.profile} src={null} alt="someone" /> : null}
+            <div className={styles.editors}>Now Editing:</div>
+            <img className={styles.profile} src={auth?.currentUser?.photoURL} alt="Profile" />
+            {photo ? <img className={styles.profile} src={photo} alt="someone" /> : null}
           </div>
         </div>
         <div className={styles["text-editor"]}>
@@ -119,6 +117,7 @@ export default function EditDocs() {
             setUpdateContents={setUpdateContents}
             setContentsValue={setContents}
             contentsValue={contents}
+            setPhoto={setPhoto}
             className={styles["text-box"]}
           />
           <div>

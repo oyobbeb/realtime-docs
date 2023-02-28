@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
 import DOMPurify from "dompurify";
 import { useNavigate, useParams } from "react-router-dom";
+import { auth } from "../../features/api/firebaseApi";
 
-export default function TextEditor({ contentsValue, setContentsValue, setUpdateContents }) {
+export default function TextEditor({ contentsValue, setContentsValue, setUpdateContents, setPhoto }) {
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
@@ -13,17 +14,31 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
     left: 0,
   })
   const { id } = useParams();
+  const photo = auth?.currentUser?.photoURL;
+  const user = auth?.currentUser?.uid;
+
 
   useEffect(() => {
     const s = io("http://localhost:3001", {
-      query: { id }
+      query: { id, photo, user }
     });
     setSocket(s);
 
     return () => {
       s.disconnect();
     }
-  }, [id]);
+  }, [id, photo, user]);
+
+  socket?.emit("current-edit", photo);
+
+  useEffect(() => {
+    socket?.emit("current-edit", photo);
+
+    socket?.on("receive-photo", (photo) => {
+      setPhoto(photo);
+    });
+
+  }, [photo, setPhoto, socket]);
 
   useEffect(() => {
     socket?.on("receive-content", (content, top, left) => {
