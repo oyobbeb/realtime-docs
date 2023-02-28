@@ -1,16 +1,37 @@
 .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
 
 .text-form {
   display: flex;
-  justify-content: space-around;
   flex-direction: column;
-  width: 50vw;
-  height: calc(30vh - 70px);
+  justify-content: space-evenly;
+  flex: 2;
+  height: 50vh;
   margin: 20px 0;
+}
+
+.editors {
+  margin: 20px;
+  padding: 20px;
+}
+
+.userlist {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
 }
 
 .input {
@@ -18,6 +39,12 @@
   border-radius: 20px;
   border: 1px solid gray;
   font-size: 20px;
+}
+
+.text-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .submit {

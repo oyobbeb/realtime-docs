@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
+import { auth } from "../../features/api/firebaseApi";
 import TextEditor from "../TextEditor";
 import styles from "./editDocs.module.css";
 
@@ -13,6 +14,8 @@ export default function EditDocs() {
   const [updateContents, setUpdateContents] = useState("");
   const [contents, setContents] = useState("");
   const { title, description } = data;
+
+  let other;
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -39,6 +42,12 @@ export default function EditDocs() {
     handleData();
   }, [id]);
 
+  useEffect(() => {
+    if (!updateContents) {
+      setUpdateContents(contents);
+    }
+  }, [updateContents, contents]);
+
   const handleSubmit = useCallback(async(e) => {
     e.preventDefault();
 
@@ -54,6 +63,7 @@ export default function EditDocs() {
         mode: "cors",
         body: JSON.stringify({ title, updateContents, description }),
       });
+
 
       const data = await response.json();
       console.log(data);
@@ -82,20 +92,27 @@ export default function EditDocs() {
     <form onSubmit={handleSubmit}>
       <div className={styles.container}>
         <div className={styles["text-form"]}>
-          <input
-            className={styles.input}
-            value={title}
-            name="title"
-            onChange={handleInput}
-            required
-          ></input>
-          <input
-            className={styles.input}
-            value={description}
-            onChange={handleInput}
-            name="description"
-            required
-          />
+          <div className={styles.inputs}>
+            <input
+              className={styles.input}
+              value={title}
+              name="title"
+              onChange={handleInput}
+              required
+            ></input>
+            <input
+              className={styles.input}
+              value={description}
+              onChange={handleInput}
+              name="description"
+              required
+            />
+          </div>
+          <div className={styles.userlist}>
+            <div className={styles.editors}>Now Editing</div>
+            <img className={styles.profile} src={auth.currentUser.photoURL} alt="Profile" />
+            {other ? <img className={styles.profile} src={null} alt="someone" /> : null}
+          </div>
         </div>
         <div className={styles["text-editor"]}>
           <TextEditor
@@ -104,9 +121,9 @@ export default function EditDocs() {
             contentsValue={contents}
             className={styles["text-box"]}
           />
-        </div>
-        <div>
-          <button className={styles.submit} type="submit">Save Document</button>
+          <div>
+            <button className={styles.submit} type="submit">Save Document</button>
+          </div>
         </div>
       </div>
     </form>
