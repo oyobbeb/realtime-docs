@@ -63,6 +63,19 @@ h3, h4 {
   border-radius: 20px;
 }
 
+.bottom {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  margin: 0 20px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .edit-button {
   display: flex;
   justify-content: center;

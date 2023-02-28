@@ -13,22 +13,25 @@ exports.renderMain = async (req, res, next) => {
 }
 
 exports.changeToken = async (req, res, next) => {
-  const { email, accessToken, displayName } = req.body;
+  const { email, accessToken, displayName, uid, photoURL } = req.body;
 
   try {
-    let user;
-    user = await User.findOne({ email });
+    let user = await User.findOne({ uid });
 
     if (!user) {
       user = await User.create({
         name: displayName,
         email,
         password: accessToken,
+        uid,
+        photoURL
       });
     }
+    const allUsers = await User.find();
+
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
 
-    res.send({ result: "ok", token });
+    res.send({ result: "ok", token, allUsers });
   } catch(err) {
     next(err);
   }

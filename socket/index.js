@@ -9,7 +9,7 @@ const maxParticipants = 2;
 const rooms = {};
 
 io.on("connection", (socket) => {
-  const { id, photo, user } = socket.handshake.query;
+  const { id, user } = socket.handshake.query;
   socket.join(id);
 
   let room = rooms[id] || { users: new Set() };
@@ -21,6 +21,17 @@ io.on("connection", (socket) => {
     socket.leave(id);
     return;
   }
+
+  const convertedRooms = Object.keys(rooms).reduce((acc, key) => {
+    acc[key] = { users: Array.from(rooms[key].users) };
+    return acc;
+  }, {});
+
+  io.emit("receive-users", convertedRooms);
+
+  socket.on("edit-users", () => {
+    socket.emit("receive-users", convertedRooms);
+  });
 
   socket.on("disconnect", () => {
     room.users.delete(user);

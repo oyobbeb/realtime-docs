@@ -67,6 +67,7 @@ export default function EditDocs() {
 
       console.log(data);
     } catch(err) {
+      alert(err);
       console.error(err);
     }
   }, [description, id, title, updateContents]);

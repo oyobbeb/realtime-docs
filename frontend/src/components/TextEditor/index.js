@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./texteditor.module.css"
 import { io } from "socket.io-client";
 import DOMPurify from "dompurify";
@@ -17,17 +17,16 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
   const photo = auth?.currentUser?.photoURL;
   const user = auth?.currentUser?.uid;
 
-
   useEffect(() => {
     const s = io("http://localhost:3001", {
-      query: { id, photo, user }
+      query: { id, user }
     });
     setSocket(s);
 
     return () => {
       s.disconnect();
     }
-  }, [id, photo, user]);
+  }, [id, user]);
 
   socket?.emit("current-edit", photo);
 
