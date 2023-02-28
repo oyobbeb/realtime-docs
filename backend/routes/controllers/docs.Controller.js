@@ -28,6 +28,19 @@ exports.saveNewDocs = async (req, res, next) => {
   }
 }
 
+exports.renderMyDocs = async (req, res, next) => {
+  const { email } = req.body;
+
+  const document = await Doc.find();
+  const mydocs = document.filter(doc => doc.createdById === email);
+
+  try {
+    res.status(200).send({ result: "ok", mydocs });
+  } catch(err) {
+    next(err);
+  }
+}
+
 exports.renderEachDoc = async (req, res, next) => {
   const { id } = req.params;
 

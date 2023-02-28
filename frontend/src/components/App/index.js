@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={user ? <Main /> : <Loading />} />
         <Route path="new" element={<NewDocs />} />
-        <Route path="my-docs" element={<Docs />} />
+        <Route path="mydocs" element={<Docs />} />
         <Route path="/docs/:id" element={<EditDocs />} />
         <Route path="/auth/signin" element={<Signin />} />
         <Route path="*" element={<NotFound />} />

@@ -12,8 +12,6 @@ export default function Headers() {
     navigate("/auth/signin");
   }
 
-  console.log(auth.currentUser);
-
   return (
     <header className={styles.header}>
       <div className={styles["left-header"]}>
@@ -25,7 +23,7 @@ export default function Headers() {
           <div>{auth?.currentUser?.displayName}</div>
           <img className={styles.profile} src={auth?.currentUser?.photoURL} alt="Profile" />
           <Link className={styles.a} to={"/new"}>New Docs</Link>
-          <Link className={styles.a} to={"/"}>My Docs</Link>
+          <Link className={styles.a} to={"/mydocs"}>My Docs</Link>
           <button className={styles["logout-button"]} onClick={logout}>Logout</button>
         </div>
       </div>
