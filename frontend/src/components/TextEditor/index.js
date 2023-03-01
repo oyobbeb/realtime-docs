@@ -12,7 +12,6 @@ export default function TextEditor({
   setPhoto,
 }) {
   const navigate = useNavigate();
-  const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
   const [position, setPosition] = useState({
     top: 0,
@@ -71,7 +70,6 @@ export default function TextEditor({
     if (setUpdateContents) {
       setUpdateContents(sanitizedValue);
     }
-    setContent((prev) => prev);
 
     const selection = window.getSelection();
     const range = selection?.getRangeAt(0);
@@ -105,9 +103,9 @@ export default function TextEditor({
                   class="${styles.cursor}"
                   style="left: ${position.left}px;
                   top: ${position.top}px;"></span>${
-                  (id && contentsValue) || content
+                  (id && contentsValue) || ""
                 }`
-              : `${(id && contentsValue) || content}`,
+              : `${(id && contentsValue) || ""}`,
         }}
         className={styles.editor}
       ></div>
