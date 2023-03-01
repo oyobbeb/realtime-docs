@@ -1,11 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./headers.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
 
 export default function Headers() {
   const navigate = useNavigate();
+  const [photo, setPhoto] = useState();
   const { displayName, email, photoURL } = auth?.currentUser || {};
+
+  useEffect(() => {
+    async function getPhotos() {
+      const photo = await fetch(photoURL);
+      const blob = await photo.blob();
+      const url = URL.createObjectURL(blob);
+
+      setPhoto(url);
+    }
+
+    getPhotos();
+  }, [photoURL]);
 
   function logout() {
     localStorage.removeItem("jwt");
@@ -22,9 +35,14 @@ export default function Headers() {
       </div>
       <div className={styles["right-header"]}>
         <div className={styles["header-component"]}>
-          <div>{email}</div>
-          <div>{displayName}</div>
-          <img className={styles.profile} src={photoURL} alt="Profile" />
+          {auth.currentUser ? (
+            <>
+              <div>{email}</div>
+              <div>{displayName}</div>
+              <img className={styles.profile} src={photo} alt="Profile" />
+            </>
+          ) : null
+          }
           <Link className={styles.a} to={"docs/new"}>
             New Docs
           </Link>

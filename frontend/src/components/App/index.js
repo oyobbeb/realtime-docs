@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Signin from "../Signin";
 import Main from "../Main";
-import Docs from "../Docs";
+import Docs from "../MyDocs";
 import NewDocs from "../NewDocs";
 import EditDocs from "../EditDoc";
 import NotFound from "../NotFound";

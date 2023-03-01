@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
 import styles from "./mydocs.module.css";
 
 export default function Docs() {
+  const navigate = useNavigate();
   const [docs, setDocs] = useState([]);
   const email = auth?.currentUser?.email;
 
   useEffect(() => {
+    if (!auth.currentUser) {
+      alert("User is not authorized");
+      return navigate("/");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     async function getMyDocs() {
+      const token = localStorage.getItem("jwt");
+
       try {
         const response = await fetch("http://localhost:8000/docs/mydocs", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           mode: "cors",
           body: JSON.stringify({ email }),
@@ -23,7 +34,7 @@ export default function Docs() {
 
         data && setDocs(data.mydocs);
       } catch (err) {
-        alert(err.message);
+        alert(err.message || "We couldn't loaded your documents");
         console.error(err);
       }
     }

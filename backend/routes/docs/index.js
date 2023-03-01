@@ -7,7 +7,7 @@ router.get("/", verifyToken, docsController.renderDocs);
 
 router.post("/new", verifyToken, docsController.saveNewDocs);
 
-router.post("/mydocs", docsController.renderMyDocs);
+router.post("/mydocs", verifyToken, docsController.renderMyDocs);
 
 router.get("/:id", verifyToken, docsController.renderEachDoc);
 router.post("/:id", verifyToken, docsController.updateContents);

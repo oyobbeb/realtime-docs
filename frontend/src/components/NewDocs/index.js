@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
 import TextEditor from "../TextEditor";
@@ -14,12 +14,15 @@ export default function NewDocs() {
   const { title, description } = data;
   const { displayName, email } = auth?.currentUser || {};
 
+  useEffect(() => {
+    if (!auth.currentUser) {
+      alert("User is not authorized");
+      return navigate("/");
+    }
+  }, [navigate]);
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if (!auth.currentUser) {
-      return navigate("/login");
-    }
 
     try {
       const token = localStorage.getItem("jwt");
@@ -39,7 +42,7 @@ export default function NewDocs() {
         return navigate("/");
       }
     } catch(err) {
-      alert("Failed to create document");
+      alert(err.message || "Failed to create document");
       console.error(err);
     }
   }
