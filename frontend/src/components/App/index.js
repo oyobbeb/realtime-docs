@@ -10,8 +10,8 @@ import Loading from "../Loading";
 import Headers from "../Headers";
 import "./app.css";
 
-import { auth } from '../../features/api/firebaseApi';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from "../../features/api/firebaseApi";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function App() {
   const [user] = useAuthState(auth);

@@ -9,7 +9,6 @@ export default function EditDocs() {
   const [data, setData] = useState({
     title: "",
     description: "",
-    contents: "",
   });
   const [updateContents, setUpdateContents] = useState("");
   const [contents, setContents] = useState("");
@@ -30,10 +29,11 @@ export default function EditDocs() {
 
       const data = await response.json();
 
-      data.document && setData({
-        title: data.document.title,
-        description: data.document.description,
-      });
+      data.document &&
+        setData({
+          title: data.document.title,
+          description: data.document.description,
+        });
 
       setContents(data?.document?.contents);
     }
@@ -47,30 +47,31 @@ export default function EditDocs() {
     }
   }, [updateContents, contents]);
 
-  const handleSubmit = useCallback(async(e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    try {
-      const token = localStorage.getItem("jwt");
+      try {
+        const token = localStorage.getItem("jwt");
 
-      const response = await fetch(`http://localhost:8000/docs/${id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        mode: "cors",
-        body: JSON.stringify({ title, updateContents, description }),
-      });
+        const response = await fetch(`http://localhost:8000/docs/${id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          mode: "cors",
+          body: JSON.stringify({ title, updateContents, description }),
+        });
 
-      const data = await response.json();
-
-      console.log(data);
-    } catch(err) {
-      alert(err);
-      console.error(err);
-    }
-  }, [description, id, title, updateContents]);
+        await response.json();
+      } catch (err) {
+        alert(err);
+        console.error(err);
+      }
+    },
+    [description, id, title, updateContents]
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -109,8 +110,14 @@ export default function EditDocs() {
           </div>
           <div className={styles.userlist}>
             <div className={styles.editors}>Now Editing:</div>
-            <img className={styles.profile} src={auth?.currentUser?.photoURL} alt="Profile" />
-            {photo ? <img className={styles.profile} src={photo} alt="someone" /> : null}
+            <img
+              className={styles.profile}
+              src={auth?.currentUser?.photoURL}
+              alt="Profile"
+            />
+            {photo ? (
+              <img className={styles.profile} src={photo} alt="someone" />
+            ) : null}
           </div>
         </div>
         <div className={styles["text-editor"]}>
@@ -122,7 +129,9 @@ export default function EditDocs() {
             className={styles["text-box"]}
           />
           <div>
-            <button className={styles.submit} type="submit">Save Document</button>
+            <button className={styles.submit} type="submit">
+              Save Document
+            </button>
           </div>
         </div>
       </div>

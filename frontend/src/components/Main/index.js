@@ -6,7 +6,7 @@ import styles from "./main.module.css";
 
 export default function Main() {
   const [docs, setDocs] = useState([]);
-  const [currentUsers, setCurrentUsers] = useState({});
+  const [currentEditedUsers, setCurrentEditedUsers] = useState({});
   const [userArray, setUserArray] = useState([]);
   const [socket, setSocket] = useState(null);
   const email = auth?.currentUser?.email;
@@ -28,12 +28,12 @@ export default function Main() {
     socket?.emit("edit-users");
 
     socket?.on("receive-users", (users) => {
-      setCurrentUsers(users);
+      setCurrentEditedUsers(users);
     });
   }, [socket]);
 
   useEffect(() => {
-    async function setToken() {
+    async function setJWTTokenAfterLogin() {
       try {
         const response = await fetch("http://localhost:8000/", {
           method: "POST",
@@ -60,11 +60,11 @@ export default function Main() {
       }
     }
 
-    setToken();
+    setJWTTokenAfterLogin();
   }, [accessToken, displayName, email, photoURL, uid]);
 
   useEffect(() => {
-    async function getDocs() {
+    async function getAllDocuments() {
       try {
         const response = await fetch("http://localhost:8000/", {
           headers: {
@@ -81,7 +81,7 @@ export default function Main() {
       }
     }
 
-    getDocs();
+    getAllDocuments();
   }, []);
 
   return (
@@ -108,7 +108,7 @@ export default function Main() {
               <div className={styles.contents}>{doc.contents}</div>
               <div>
                 {doc._id &&
-                  Object.entries(currentUsers)
+                  Object.entries(currentEditedUsers)
                     .filter(([key, value]) => key === doc._id)
                     .map(([key, value]) => (
                       <div key={key} className={styles.bottom}>

@@ -12,10 +12,15 @@ export default function NewDocs() {
   });
   const [contents, setContents] = useState("");
   const { title, description } = data;
-  const displayName = auth?.currentUser?.displayName;
-  const email = auth?.currentUser?.email;
+  const { displayName, email } = auth?.currentUser || {};
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!auth.currentUser) {
+      return navigate("/login");
+    }
+
     try {
       const token = localStorage.getItem("jwt");
 
@@ -31,10 +36,10 @@ export default function NewDocs() {
       const data = await response.json();
 
       if (data.result === "ok") {
-        navigate("/");
+        return navigate("/");
       }
     } catch(err) {
-      alert(err);
+      alert("Failed to create document");
       console.error(err);
     }
   }

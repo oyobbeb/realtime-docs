@@ -22,8 +22,9 @@ export default function Docs() {
         const data = await response.json();
 
         data && setDocs(data.mydocs);
-      } catch(err) {
+      } catch (err) {
         alert(err.message);
+        console.error(err);
       }
     }
 
@@ -33,7 +34,7 @@ export default function Docs() {
   return (
     <div>
       <div className={styles.grid}>
-        {docs.map((doc) =>
+        {docs.map((doc) => (
           <div key={doc._id} className={styles.doc}>
             <h3>{doc.title}</h3>
             <h4>{doc.description}</h4>
@@ -41,11 +42,13 @@ export default function Docs() {
             <div className={styles["right-section"]}>
               <div className={styles["right-bottom"]}>
                 <div className={styles["name-container"]}>{doc.createdBy}</div>
-                <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>편집</Link>
+                <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>
+                  편집
+                </Link>
               </div>
             </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
