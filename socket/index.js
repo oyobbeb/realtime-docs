@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 
   socket.on("edit-content", (content, id, top, left) => {
     if (!id) {
-      socket.broadcast.emit("receive-content", content);
+      return;
     }
 
     socket.to(id).emit("receive-content", content, top, left);

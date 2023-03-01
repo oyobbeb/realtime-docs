@@ -6,14 +6,14 @@ import styles from "./editDocs.module.css";
 
 export default function EditDocs() {
   const { id } = useParams();
-  const [data, setData] = useState({
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
   });
   const [updateContents, setUpdateContents] = useState("");
   const [contents, setContents] = useState("");
   const [photo, setPhoto] = useState("");
-  const { title, description } = data;
+  const { title, description } = formData || {};
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -30,7 +30,7 @@ export default function EditDocs() {
       const data = await response.json();
 
       data.document &&
-        setData({
+        setFormData({
           title: data.document.title,
           description: data.document.description,
         });
@@ -82,8 +82,8 @@ export default function EditDocs() {
   }, [handleSubmit]);
 
   function handleInput(e) {
-    setData({
-      ...data,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
     });
   }

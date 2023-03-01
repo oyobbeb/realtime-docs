@@ -25,4 +25,17 @@
   width: 2px;
   height: 16px;
   background-color: red;
+  animation: cursor-flicker 1s infinite;
+}
+
+@keyframes cursor-flicker {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

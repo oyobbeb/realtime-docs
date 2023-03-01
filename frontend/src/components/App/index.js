@@ -14,13 +14,13 @@ import { auth } from "../../features/api/firebaseApi";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 function App() {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   return (
     <div className="App">
       <Headers />
       <Routes>
-        <Route path="/" element={user ? <Main /> : <Loading />} />
+        <Route path="/" element={loading ? <Loading /> : <Main />} />
         <Route path="/docs" element={<Navigate to="/" replace />} />
         <Route path="/docs">
           <Route path="new" element={<NewDocs />} />

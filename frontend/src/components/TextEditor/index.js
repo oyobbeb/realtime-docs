@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from "react";
-import styles from "./texteditor.module.css"
+import styles from "./texteditor.module.css";
 import { io } from "socket.io-client";
 import DOMPurify from "dompurify";
 import { useNavigate, useParams } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
 
-export default function TextEditor({ contentsValue, setContentsValue, setUpdateContents, setPhoto }) {
+export default function TextEditor({
+  contentsValue,
+  setContentsValue,
+  setUpdateContents,
+  setPhoto,
+}) {
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [socket, setSocket] = useState(null);
   const [position, setPosition] = useState({
     top: 0,
     left: 0,
-  })
+  });
   const { id } = useParams();
   const photo = auth?.currentUser?.photoURL;
   const user = auth?.currentUser?.uid;
 
   useEffect(() => {
     const s = io("http://localhost:3001", {
-      query: { id, user }
+      query: { id, user },
     });
     setSocket(s);
 
     return () => {
       s.disconnect();
-    }
+    };
   }, [id, user]);
 
   socket?.emit("current-edit", photo);
@@ -34,9 +39,10 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
     socket?.emit("current-edit", photo);
 
     socket?.on("receive-photo", (photo) => {
-      setPhoto(photo);
+      if (setPhoto) {
+        setPhoto(photo);
+      }
     });
-
   }, [photo, setPhoto, socket]);
 
   useEffect(() => {
@@ -45,7 +51,7 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
         setContentsValue(content);
       }
 
-      setPosition({top, left});
+      setPosition({ top, left });
     });
 
     socket?.on("room-full", () => {
@@ -57,15 +63,15 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
   function handleInput(e) {
     const newContent = e.target.innerHTML;
     const sanitizedValue = DOMPurify.sanitize(newContent);
-    setContent((prev) => prev);
 
     const editor = e.target;
     const spansToRemove = editor.querySelectorAll("span");
-    spansToRemove.forEach(span => span.remove());
+    spansToRemove.forEach((span) => span.remove());
 
     if (setUpdateContents) {
       setUpdateContents(sanitizedValue);
     }
+    setContent((prev) => prev);
 
     const selection = window.getSelection();
     const range = selection?.getRangeAt(0);
@@ -93,9 +99,15 @@ export default function TextEditor({ contentsValue, setContentsValue, setUpdateC
         onInput={handleInput}
         onKeyDown={handleKeyDown}
         dangerouslySetInnerHTML={{
-          __html: position.top > 0 ?
-          `<span class="${styles.cursor}" style="left: ${position.left}px; top: ${position.top}px;"></span>${(id && contentsValue) || content}` :
-          `${(id && contentsValue) || content}`
+          __html:
+            position.top > 0
+              ? `<span
+                  class="${styles.cursor}"
+                  style="left: ${position.left}px;
+                  top: ${position.top}px;"></span>${
+                  (id && contentsValue) || content
+                }`
+              : `${(id && contentsValue) || content}`,
         }}
         className={styles.editor}
       ></div>

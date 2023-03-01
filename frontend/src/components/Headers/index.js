@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./headers.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../features/api/firebaseApi";
 
 export default function Headers() {
   const navigate = useNavigate();
+  const { displayName, email, photoURL } = auth?.currentUser || {};
 
   function logout() {
     localStorage.removeItem("jwt");
@@ -21,22 +22,27 @@ export default function Headers() {
       </div>
       <div className={styles["right-header"]}>
         <div className={styles["header-component"]}>
-          <div>{auth?.currentUser?.email}</div>
-          <div>{auth?.currentUser?.displayName}</div>
-          <img
-            className={styles.profile}
-            src={auth?.currentUser?.photoURL}
-            alt="Profile"
-          />
+          <div>{email}</div>
+          <div>{displayName}</div>
+          <img className={styles.profile} src={photoURL} alt="Profile" />
           <Link className={styles.a} to={"docs/new"}>
             New Docs
           </Link>
           <Link className={styles.a} to={"docs/mydocs"}>
             My Docs
           </Link>
-          <button className={styles["logout-button"]} onClick={logout}>
-            Logout
-          </button>
+          {auth.currentUser ? (
+            <button className={styles["logout-button"]} onClick={logout}>
+              Logout
+            </button>
+          ) : (
+            <button
+              className={styles["logout-button"]}
+              onClick={() => navigate("/auth/signin")}
+            >
+              Login
+            </button>
+          )}
         </div>
       </div>
     </header>
