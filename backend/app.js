@@ -2,11 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const connectToMongoDB = require("./utils/mongoose");
 
 app.use(cors());
 app.use(express.json());
-
-const connectToMongoDB = require("./utils/mongoose");
 
 const authRouter = require("./routes/auth/index");
 const mainRouter = require("./routes/main/index");

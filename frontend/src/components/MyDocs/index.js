@@ -47,17 +47,16 @@ export default function Docs() {
       <div className={styles.grid}>
         {docs.map((doc) => (
           <div key={doc._id} className={styles.doc}>
-            <h3>{doc.title}</h3>
-            <h4>{doc.description}</h4>
-            <div className={styles.contents}>{doc.contents}</div>
-            <div className={styles["right-section"]}>
-              <div className={styles["right-bottom"]}>
+            <div className={styles.title}>
+              <h3>{doc.title}</h3>
+              <div className={styles["right-top"]}>
                 <div className={styles["name-container"]}>{doc.createdBy}</div>
                 <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>
                   편집
                 </Link>
               </div>
             </div>
+            <div className={styles.contents}>{doc.contents}</div>
           </div>
         ))}
       </div>

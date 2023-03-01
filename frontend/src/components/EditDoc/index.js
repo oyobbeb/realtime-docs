@@ -76,7 +76,7 @@ export default function EditDocs() {
   useEffect(() => {
     const interval = setInterval(() => {
       handleSubmit({ preventDefault: () => {} });
-    }, 20000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [handleSubmit]);

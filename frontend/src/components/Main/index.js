@@ -54,7 +54,7 @@ export default function Main() {
 
         setUserArray(data?.allUsers);
       } catch (err) {
-        alert("User is not authorized");
+        alert(err.message || "User is not authorized");
         console.error(err);
       }
     }
@@ -77,7 +77,8 @@ export default function Main() {
         data && setDocs(data.docs);
       } catch (err) {
         alert(
-          "Sorry, we couldn't load your documents at this time. Please try again later."
+          err.message ||
+            "Sorry, we couldn't load your documents at this time. Please try again later."
         );
         console.error(err);
       }
@@ -95,20 +96,29 @@ export default function Main() {
               <h3>{doc.title}</h3>
               <div className={styles["right-top"]}>
                 <div className={styles["name-container"]}>{doc.createdBy}</div>
-                <Link to={`/docs/${doc._id}`} className={styles["edit-button"]}>
-                  편집
-                </Link>
+                {auth.currentUser && (
+                  <Link
+                    to={`/docs/${doc._id}`}
+                    className={styles["edit-button"]}
+                  >
+                    편집
+                  </Link>
+                )}
               </div>
             </div>
             <div className={styles.description}>{doc.description}</div>
-            <div className={styles.contents}>{doc.contents}</div>
+            {auth.currentUser ? (
+              <div className={styles.contents}>{doc.contents}</div>
+            ) : (
+              <div className={styles.stranger}>{doc.contents}</div>
+            )}
             <div>
+              Now editing:
               {doc._id &&
                 Object.entries(currentEditingUsers)
                   .filter(([key, value]) => key === doc._id)
                   .map(([key, value]) => (
                     <div key={key} className={styles.bottom}>
-                      Now editing:
                       {value.users.map((user) => {
                         const currentUser = userArray.find(
                           (u) => u.uid === user

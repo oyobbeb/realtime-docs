@@ -10,11 +10,12 @@ export default function Headers() {
 
   useEffect(() => {
     async function getPhotos() {
-      const photo = await fetch(photoURL);
+      const proxyUrl = 'https://api.allorigins.win/raw?url=';
+      const photo = await fetch(proxyUrl + photoURL);
       const blob = await photo.blob();
-      const url = URL.createObjectURL(blob);
+      const urls = URL.createObjectURL(blob);
 
-      setPhoto(url);
+      setPhoto(urls);
     }
 
     getPhotos();
